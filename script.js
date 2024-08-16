@@ -21,19 +21,6 @@ function removeItem(e) {
 }
 uList.addEventListener("click", removeItem);
 
-//--------check if there is no tasks delete clear n filter----
-function check() {
-   const li = uList.querySelectorAll("li");
-   if (li.length == 0) {
-      clear.style.display = "none";
-      filter.style.display = "none";
-   } else {
-      clear.style.display = "block";
-      filter.style.display = "block";
-   }
-}
-check();
-
 // ---------------add item when submit-------------------
 
 function onSubmit(e) {
@@ -67,3 +54,36 @@ function createIcon(classes) {
    return icon;
 }
 form.addEventListener("submit", onSubmit);
+
+// filter function
+function onFilter(e) {
+   const li = uList.querySelectorAll("li");
+   const text = e.target.value.toLowerCase();
+   li.forEach((item) => {
+      const taskName = item.firstChild.textContent.toLocaleLowerCase();
+      console.log(taskName);
+      if (taskName.indexOf(text) != -1) {
+         item.style.display = "flex";
+      } else {
+         item.style.display = "none";
+      }
+   });
+   check();
+}
+
+filter.addEventListener("input", onFilter);
+
+//--------check if there is no tasks delete clear n filter----
+
+function check() {
+   const li = uList.querySelectorAll("li");
+   if (li.length == 0) {
+      clear.style.display = "none";
+      filter.style.display = "none";
+      filter.value = "";
+   } else {
+      clear.style.display = "block";
+      filter.style.display = "block";
+   }
+}
+check();
