@@ -24,13 +24,21 @@ uList.addEventListener("click", removeItem);
 // ---------------add item when submit-------------------
 
 function onSubmit(e) {
+   const value = input.value;
    e.preventDefault();
    if (input.value == ``) {
       alert("Enter a Task first");
       return;
    }
+   addToTheDom(value);
+   addToStorage(value);
+   check();
+}
+
+//------------------add To The DOM-------------------
+function addToTheDom(item) {
    const li = document.createElement("li");
-   li.appendChild(document.createTextNode(input.value));
+   li.appendChild(document.createTextNode(item));
    // add button
    const button = createButton("remove-item btn-link text-red");
    // append icon to button
@@ -41,8 +49,33 @@ function onSubmit(e) {
    // append li to ul
    uList.appendChild(li);
    input.value = ""; // clear input
+}
+//-----------------add to the LocalSTORAGE-------------------
+function addToStorage(item) {
+   const itemsFromStorage = fromStorageToDom();
+   itemsFromStorage.push(item);
+   // convert to json n stringify----------
+   localStorage.setItem("items", JSON.stringify(itemsFromStorage));
+}
+
+// ---------FROM--STORAGE-------TO---DOM ---------------
+function fromStorageToDom() {
+   let itemsFromStorage;
+   if (localStorage.getItem("items") === null) {
+      itemsFromStorage = [];
+   } else {
+      itemsFromStorage = JSON.parse(localStorage.getItem("items"));
+   }
+   return itemsFromStorage;
+}
+function storageToDom(item) {
+   const itemsFromStorage = fromStorageToDom();
+   itemsFromStorage.forEach((item) => addToTheDom(item));
    check();
 }
+
+window.addEventListener("DOMContentLoaded", storageToDom);
+// ---------------create button and Icon
 function createButton(classes) {
    const button = document.createElement("button");
    button.classList = classes;
@@ -53,6 +86,7 @@ function createIcon(classes) {
    icon.classList = classes;
    return icon;
 }
+
 form.addEventListener("submit", onSubmit);
 
 // filter function
