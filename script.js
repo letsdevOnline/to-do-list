@@ -12,14 +12,29 @@ function onClear() {
 clear.addEventListener("click", onClear);
 
 //remove each item by click the x icon
-
-function removeItem(e) {
+function onClickItem(e) {
    if (e.target.parentElement.classList.contains("remove-item")) {
-      e.target.parentElement.parentElement.remove();
+      removeItem(e.target.parentElement.parentElement);
    }
+}
+function removeItem(item) {
+   // remove from dom
+   item.remove();
+   //remove from LocalStorage
+   removeItemFromStorage(item.textContent);
    check();
 }
-uList.addEventListener("click", removeItem);
+
+function removeItemFromStorage(item) {
+   let itemsFromStorage = fromStorageToDom();
+   // filter to remove
+   itemsFromStorage = itemsFromStorage.filter((i) => i !== item);
+   //reset to localstorage
+
+   localStorage.setItem("items", JSON.stringify(itemsFromStorage));
+   check();
+}
+uList.addEventListener("click", onClickItem);
 
 // ---------------add item when submit-------------------
 
