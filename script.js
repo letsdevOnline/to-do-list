@@ -6,7 +6,9 @@ const input = document.querySelector("#input");
 
 //clear button Activate
 function onClear() {
+   confirm("are you sure?");
    uList.innerHTML = ``;
+   localStorage.clear();
    check();
 }
 clear.addEventListener("click", onClear);
